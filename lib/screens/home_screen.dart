@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/PopularAnime.dart';
+import 'package:movie_app/widgets/CustomAppBar.dart';
 import 'package:movie_app/widgets/popular_anime_carousel.dart';
 import '../services/anime_services.dart';
 import '../models/anime.dart';
@@ -34,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      final List<Anime> fetchedAnimes = await _animeService.fetchAnimes(page: _currentPage, limit: 7, q: query);
+      final List<Anime> fetchedAnimes = await _animeService.fetchAnimes(
+          page: _currentPage, limit: 7, q: query);
       if (fetchedAnimes.isEmpty) {
         setState(() {
           _hasMore = false;
@@ -58,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _fetchPopularAnimes() async {
     try {
-      final List<Anime> fetchedPopularAnimes = await _animeService.fetchPopularAnimes(limit: 13);
+      final List<Anime> fetchedPopularAnimes =
+          await _animeService.fetchPopularAnimes(limit: 13);
       setState(() {
         _popularAnimes.addAll(fetchedPopularAnimes);
       });
@@ -81,48 +85,62 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
-      appBar: AppBar(
-        title: TextField(
-          onChanged: _onSearchChanged,
-          decoration: const InputDecoration(
-            hintText: 'Search anime...',
-            border: InputBorder.none,
-          ),
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+      appBar: const CustomAppBar(title: 'N Anime'),
       body: NotificationListener<ScrollNotification>(
         onNotification: (scrollInfo) {
-          if (!_isLoading && _hasMore && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+          if (!_isLoading &&
+              _hasMore &&
+              scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
             _fetchAnimes(query: _searchQuery);
           }
           return false;
         },
         child: ListView(
           children: [
-        if ( _popularAnimes.isNotEmpty)
-            Container(
-        padding: const EdgeInsets.fromLTRB(0, 12.0, 0,0),
-              child: popularAnimeCarousel(_popularAnimes,
-            ))
-            ,
+            if (_popularAnimes.isNotEmpty)
+              Container(
+                  padding: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
+                  child: popularAnimeCarousel(
+                    _popularAnimes,
+                  )),
             Column(
-
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 8
+                Padding(
+                  padding: const EdgeInsets.only(top: 8,left: 12,right: 12),
+                  child: TextField(
+                    onChanged: _onSearchChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Search anime...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
+                      ),
+
+
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.tertiary,
+                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary.withOpacity(0.7)),
+
+                    ),
+                    style:  TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  ),
+
+                )
+                ,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  child: Text(
+                    "All Anime",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                child: Text("All Anime",style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-
-
-                ),),),
                 GridView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
