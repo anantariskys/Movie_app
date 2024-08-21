@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/anime.dart';
+import 'package:movie_app/models/anime.dart';
+import '../models/PopularAnime.dart';
 
 class AnimeServices {
   static const String baseUrl = 'https://api.jikan.moe/v4';
