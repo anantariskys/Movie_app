@@ -27,9 +27,10 @@ class AnimeDetailScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  left: 32,
-                  right: -40,
+                  left: 8,
+                  top:4,
                   child: Image.network(
+                    width: 160,
                     anime.imageUrl,
 
                   ),
