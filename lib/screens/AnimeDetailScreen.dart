@@ -12,41 +12,66 @@ class AnimeDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: CustomAppBar(title: anime.title),
-      body: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        children: [
+          Container(
+            height: 240,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
+              ),
+            ),
+            child: Stack(
               children: [
-                AspectRatio(
-                  aspectRatio: 3/4,
+                Positioned(
+                  left: 32,
+                  right: -40,
                   child: Image.network(
                     anime.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  anime.title,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  anime.synopsis,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.tertiary,
+
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          Padding(padding: EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16.0),
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 4.0,
+                children: anime.genres.map((genre) {
+                  return Chip(
+                    label: Text(genre.name),
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16.0),
+              Text(
+                anime.title,
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Text(
+                anime.synopsis,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ],
+          ),
+          )
+        ],
       ),
     );
   }
